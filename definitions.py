@@ -5,7 +5,7 @@ from difflib import get_close_matches
 dicts = json.load(open('JSON.dictionary', 'r'))
 
 
-def translator(entry):
+def get_definition(entry):
     entry = entry.lower()
     if entry in dicts:
         return dicts[entry]
@@ -16,8 +16,9 @@ def translator(entry):
     elif entry.upper() in dicts:
         return dicts[entry.upper()]
 
+    # In case the user misspells their word, this will find words almost matching
     elif len(get_close_matches(entry, dicts.keys())) > 0:
-        yes_no = input(f'Did you mean {get_close_matches(entry, dicts.keys())[0]}?  Enter Y if yes or N if no.')
+        yes_no = input(f'Did you mean {get_close_matches(entry, dicts.keys())[0]}?  Enter Y for yes or N for no.')
         if yes_no == 'Y':
             return dicts[get_close_matches(entry, dicts.keys())[0]]
         else:
@@ -28,7 +29,7 @@ def translator(entry):
 
 
 word = input('Please enter a word ')
-output = translator(word)
+output = get_definition(word)
 
 if type(output) == list:
     for word in output:
